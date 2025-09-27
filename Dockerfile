@@ -25,13 +25,6 @@ RUN if [ -f /tmp/requirements.txt ]; then \
 RUN ln -sf /opt/venv/bin/python /usr/local/bin/python && \
     ln -sf /opt/venv/bin/pip /usr/local/bin/pip
 
-# Copy entrypoint script
-COPY --chown=node:node docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod +x /docker-entrypoint.sh
-
 USER node
 
 ENV PATH="/opt/venv/bin:${PATH}"
-
-# Override the entrypoint
-ENTRYPOINT ["/docker-entrypoint.sh"]
