@@ -23,7 +23,7 @@ services:
       - key: DB_POSTGRESDB_DATABASE
         value: n8n_3dvd
       - key: DB_POSTGRESDB_USER
-        value: postgres
+        value: n8n_user
       - key: DB_POSTGRESDB_PASSWORD
         sync: false  # This tells Render to expect manual input
       - key: DB_POSTGRESDB_PORT
