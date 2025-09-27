@@ -12,13 +12,14 @@ RUN apk update && \
     && rm -rf /var/cache/apk/*
 
 # Create a virtual environment
-RUN python3 -m venv /opt/venv
+RUN python3 -m venv /opt/venv && \
+    chown -R node:node /opt/venv
 
-# Install packages in the virtual environment
-COPY requirements.txt .
-RUN if [ -f requirements.txt ]; then \
+# Copy and install Python requirements
+COPY --chown=node:node requirements.txt /tmp/requirements.txt
+RUN if [ -f /tmp/requirements.txt ]; then \
     /opt/venv/bin/pip install --upgrade pip && \
-    /opt/venv/bin/pip install --no-cache-dir -r requirements.txt; \
+    /opt/venv/bin/pip install --no-cache-dir -r /tmp/requirements.txt; \
     fi
 
 # Create a symlink to make the virtual environment Python available system-wide
@@ -32,3 +33,4 @@ USER node
 ENV PATH="/opt/venv/bin:${PATH}"
 
 # n8n will start automatically (from the base image)
+ENV N8N_USER_FOLDER=/home/node/.n8n

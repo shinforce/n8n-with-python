@@ -2,12 +2,12 @@ services:
   - type: web
     name: n8n-with-python
     env: docker
-    dockerfile: Dockerfile
+    dockerfilePath: ./Dockerfile
     plan: starter
     envVars:
       # Authentication
       - key: N8N_BASIC_AUTH_ACTIVE
-        value: true
+        value: "true"
       - key: N8N_BASIC_AUTH_USER
         generateValue: true
       - key: N8N_BASIC_AUTH_PASSWORD
@@ -15,28 +15,40 @@ services:
       - key: N8N_ENCRYPTION_KEY
         generateValue: true
       
-      # Database Configuration
+      # CRITICAL: Database Configuration
       - key: DB_TYPE
         value: postgresdb
       - key: DB_POSTGRESDB_HOST
-        value: dpg-d3bsmhili9vc73d2hcvg-a  # Internal URL (no domain)
+        value: dpg-d3bsmhili9vc73d2hcvg-a  # Internal hostname
+      - key: DB_POSTGRESDB_PORT
+        value: "5432"
       - key: DB_POSTGRESDB_DATABASE
         value: n8n_3dvd
       - key: DB_POSTGRESDB_USER
-        value: n8n_user
+        value: n8n_user  # FIXED: Use correct username
       - key: DB_POSTGRESDB_PASSWORD
-        sync: false  # This tells Render to expect manual input
-      - key: DB_POSTGRESDB_PORT
-        value: "5432"  # Ensure this is a string
+        sync: false  # Set manually in dashboard
       
-      # Additional settings
+      # SSL Configuration (Required for Render)
+      - key: DB_POSTGRESDB_SSL_MODE
+        value: require
+      - key: DB_POSTGRESDB_SSL_REJECT_UNAUTHORIZED
+        value: "false"
+      
+      # n8n Configuration
       - key: N8N_HOST
         value: n8n-with-python.onrender.com
-      - key: NODE_ENV
-        value: production
+      - key: N8N_PROTOCOL
+        value: https
       - key: WEBHOOK_URL
         value: https://n8n-with-python.onrender.com/
+      - key: NODE_ENV
+        value: production
       
-      # Temporary debug (remove after it works)
+      # Important for Docker
+      - key: EXECUTIONS_PROCESS
+        value: main
+      
+      # Remove after it works
       - key: N8N_LOG_LEVEL
         value: debug
