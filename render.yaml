@@ -5,25 +5,37 @@ services:
     dockerfile: Dockerfile
     plan: starter
     envVars:
+      # Authentication
       - key: N8N_BASIC_AUTH_ACTIVE
         value: true
       - key: N8N_BASIC_AUTH_USER
         generateValue: true
       - key: N8N_BASIC_AUTH_PASSWORD
         generateValue: true
+      - key: N8N_ENCRYPTION_KEY
+        generateValue: true
+      
+      # Database Configuration - USING ACTUAL VALUES
       - key: DB_TYPE
         value: postgresdb
       - key: DB_POSTGRESDB_HOST
-        fromService:
-          type: postgres
-          name: n8n-database
-          property: host
-      - key: DB_POSTGRESDB_PASSWORD
-        fromService:
-          type: postgres
-          name: n8n-database
-          property: password
+        value: dpg-d3bsmhili9vc73d2hcvg-a.oregon-postgres.render.com
       - key: DB_POSTGRESDB_DATABASE
         value: n8n_3dvd
       - key: DB_POSTGRESDB_USER
-        value: n8n_user
+        value: postgres
+      # Password will be set manually in dashboard (NOT committed to GitHub)
+      - key: DB_POSTGRESDB_PORT
+        value: 5432
+      
+      # Additional settings
+      - key: N8N_HOST
+        value: n8n-with-python.onrender.com
+      - key: NODE_ENV
+        value: production
+      
+      # Debug logging (temporary - remove after it works)
+      - key: N8N_LOG_LEVEL
+        value: debug
+      - key: DB_LOGGING
+        value: true
