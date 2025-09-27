@@ -52,3 +52,7 @@ services:
       # Remove after it works
       - key: N8N_LOG_LEVEL
         value: debug
+			- key: DEBUG
+			  value: "n8n:*"
+			- key: DB_LOGGING
+			  value: "true"
